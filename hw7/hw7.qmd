@@ -9,10 +9,12 @@ format:
         embed-resources: true
         code-copy: true
 ---
+## Summary:
+- This project involves the creation of a database to capture the collective skills, certifications, and roles of employees in our company. The database is structured into five primary tables: `skills`, `people`, `peopleskills`, `roles`, and `people_roles`. Each table serves a specific function, from storing employee information to detailing their skills and roles within the company. This database will assist in identifying skill gaps, employee qualifications, and role assignments.
+
 
 (include a brief description of what is in this document)
 
-(Please clean up any comments that I included.  This is a scaffold document.)
 
 GITHUB URL:  <your URL goes here!>
 
@@ -31,24 +33,20 @@ from IPython.display import display, Markdown
 ```{python}
 #| eval: true
 #| echo: false
-
+load_dotenv()
 # modify config_map to reflect credentials needed by this program
-config_map = {
-    'user':'CMSC508_USER',
-    'password':'CMSC508_PASSWORD',
-    'host':'CMSC508_HOST',
-    'database':'HW7_DB_NAME'
+config = {
+    'user': os.getenv("CMSC508_USER"),
+    'password': os.getenv("CMSC508_PASSWORD"),
+    'host': os.getenv("CMSC508_HOST"),
+    'database': os.getenv("HW7_DB_NAME"),
 }
 # load and store credentials
-load_dotenv()
-config = {}
-for key in config_map.keys():
-    config[key] = os.getenv(config_map[key])
-flag = False
-for param in config.keys():
-    if config[param] is None:
+for key in config.keys():
+    flag = False
+    if config[key] is None:
         flag = True
-        print(f"Missing {config_map[param]} in .env file")
+        print(f"Missing {config[key]} in .env file")
 #if flag:
 #    sys.exit(1)
 ```
@@ -92,26 +90,58 @@ except Exception as e:
 
 ## Overview and description
 
-(briefly describe the project and the database)
+This project involves the creation of a database to capture the collective skills, certifications, and roles of employees in our company. The database is structured into five primary tables: `skills`, `people`, `peopleskills`, `roles`, and `people_roles`. Each table serves a specific function, from storing employee information to detailing their skills and roles within the company. This database will assist in identifying skill gaps, employee qualifications, and role assignments.
 
 ## Crows-foot diagram
 
-(add a description of the diagram and what the reader is seeing.)
+Below is the Crows-Foot Entity-Relationship Diagram (ERD) representing our database. This diagram illustrates how each table is interlinked, showcasing the relationships between employees, their skills, and their roles within the company.
 
 ```{mermaid}
-%%| echo: false
 erDiagram
-    CUSTOMER ||--o{ ORDER : places
-    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
-    CUSTOMER{
-        int id
-        string first_name
-        string last_name
+    PEOPLE }|--o{ PEOPLESKILLS : "may_have"
+    SKILLS }|--o{ PEOPLESKILLS : "required_for"
+    PEOPLE }|--o{ PEOPLE_ROLES : "resposible_for"
+    ROLES }|--o{ PEOPLE_ROLES : "assigned_to"
+
+    PEOPLE {
+        id
+        first_name
+        last_name
+        email
+        linkedin_url
+        headshot_url
+        discord_handle
+        brief_bio
+        date_joined
     }
-    DELIVERY-ADDRESS {
-        int id
+    SKILLS {
+        id
+        name
+        description
+        tag
+        url
+        time_commitment
+    }
+    PEOPLESKILLS {
+        id
+        skills_id
+        people_id
+        date_acquired
+        date_anticipated
+    }
+    ROLES {
+        id
+        name
+        sort_priority
+    }
+    PEOPLE_ROLES {
+        id
+        people_id
+        role_id
+        date_role_acquired
     }
 ```
+
 
 ## Examples of data in the database
 
@@ -120,6 +150,7 @@ For the people, skills, and roles tables, provide a description of each table an
 ### People table
 
 The *people* table contains elements that describe ... 
+The `people` table contains detailed information about each employee, including their name, contact details, professional links, and the date they joined the company. It serves as a central repository for employee data.
 
 Below is a list of data in the *people* table.
 
@@ -143,6 +174,8 @@ df
 ### Skills table
 
 The *skills* table contains elements that describe ... 
+The `skills` table catalogues various skills and certifications available or acquired within our company. Each skill is described along with its learning commitment and a URL for more information.
+
 
 Below is a list of data in the *skills* table.
 
