@@ -365,14 +365,12 @@ END //
 DELIMITER ;
 ```{python}
 query = """
-SHOW TABLES
 SELECT s.name
 FROM skills s
 JOIN peopleskills ps
 ON s.id = ps.skills_id
 WHERE ps.people_id = 1
 """
-
 df = pd.read_sql(query, cnx)
 
 
@@ -429,7 +427,7 @@ DELIMITER ;
 query = """
 SELECT p.first_name, p.last_name
 FROM people p
-JOIN peopleroles pr ON p.id = pr.people_id
+JOIN people_roles pr ON p.id = pr.people_id
 JOIN roles r ON pr.role_id = r.id
 WHERE r.name = 'DEVELOPER';
 """
@@ -529,7 +527,7 @@ DELIMITER ;
 query = """
 SELECT p.first_name, p.last_name, s.name AS skill_name
 FROM people p
-JOIN peopleroles pr ON p.id = pr.people_id
+JOIN people_roles pr ON p.id = pr.people_id
 JOIN roles r ON pr.role_id = r.id
 JOIN peopleskills ps ON p.id = ps.people_id
 JOIN skills s ON ps.skills_id = s.id
