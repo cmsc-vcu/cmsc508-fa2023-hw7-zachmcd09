@@ -1,6 +1,6 @@
 ---
 title: Homework 7 - Creating a resume database
-author: (your name goes here!)
+author: Zachariah McDonough
 date: last-modified
 format:
     html:
@@ -13,10 +13,7 @@ format:
 - This project involves the creation of a database to capture the collective skills, certifications, and roles of employees in our company. The database is structured into five primary tables: `skills`, `people`, `peopleskills`, `roles`, and `people_roles`. Each table serves a specific function, from storing employee information to detailing their skills and roles within the company. This database will assist in identifying skill gaps, employee qualifications, and role assignments.
 
 
-(include a brief description of what is in this document)
-
-
-GITHUB URL:  <your URL goes here!>
+GITHUB URL:  <https://github.com/cmsc-vcu/cmsc508-fa2023-hw7-zachmcd09
 
 ```{python}
 #| eval: true
@@ -149,16 +146,17 @@ For the people, skills, and roles tables, provide a description of each table an
 
 ### People table
 
-The *people* table contains elements that describe ... 
 The `people` table contains detailed information about each employee, including their name, contact details, professional links, and the date they joined the company. It serves as a central repository for employee data.
 
-Below is a list of data in the *people* table.
-
+- **Data:**
 ```{python}
 #| echo: false
 #| eval: true
 sql = f"""
-select * from people;
+select
+    *
+from
+    people;
 """
 ## Add code to list roles table here
 try:
@@ -172,18 +170,55 @@ df
 ```
 
 ### Skills table
+- The `skills` table catalogues various skills and certifications available or acquired within our company. Each skill is described along with its learning commitment and a URL for more information.
 
-The *skills* table contains elements that describe ... 
-The `skills` table catalogues various skills and certifications available or acquired within our company. Each skill is described along with its learning commitment and a URL for more information.
-
-
-Below is a list of data in the *skills* table.
 
 ```{python}
 #| echo: false
 #| eval: true
 
-## Add code to list roles table here
+sql_query = pd.read_sql("""
+select
+  *
+from 
+  information_schema.columns
+where 
+  table_schema='23FA_users_zcmcdonough';
+"""
+,cnx)
+
+sql_query.head(15)
+
+def show_table( table_name ):
+    """ Show a table using Display and Markdown """
+    # Note the use of f-strings to embed the variable name.
+    query = f"""
+    select
+        ordinal_position,column_name,column_type,column_key, is_nullable
+    from
+        information_schema.columns
+    where
+    table_schema='23FA_users_zcmcdonough'
+        and table_name='{table_name}'
+    order by 
+        ordinal_position;
+    """
+    sql_query = pd.read_sql( query, cnx )
+    display(Markdown(f"**Table: {table_name}** \n"))
+    display(Markdown(tabulate(
+       sql_query,
+       headers=['Pos','Name','Type','Key','IsNull'],
+       showindex= False
+        )
+    )
+)  
+
+
+table_names = cnx.connect().execute(text("show tables"))
+for table_name in table_names:
+    if table_name[0] == 'skills':
+        show_table(table_name[0])
+
 ```
 
 ### Roles table
@@ -195,8 +230,63 @@ Below is a list of data in the *roles* table.
 ```{python}
 #| echo: false
 #| eval: true
-
+sql = f"""
+select * from roles;
+"""
 ## Add code to list roles table here
+try:
+    df = pd.read_sql(sql,cnx)
+    df
+except Exception as e:
+    message = str(e)
+    print(f"An error occurred:\n\n{message}\n\nIgnoring and moving on.")
+    df = pd.DataFrame()
+df
+```
+
+### Skills table
+- The `skills` table catalogues various skills and certifications available or acquired within our company. Each skill is described along with its learning commitment and a URL for more information.
+
+
+```{python}
+#| echo: false
+#| eval: true
+
+sql_query = pd.read_sql(f"""
+select
+  *
+from 
+  information_schema.columns
+where 
+  table_schema='23FA_users_zcmcdonough'
+"""
+,cnx)
+
+sql_query.head(15)
+
+def show_table( table_name ):
+    """ Show a table using Display and Markdown """
+    # Note the use of f-strings to embed the variable name.
+    query = f"""
+select
+  ordinal_position,column_name,column_type,column_key, is_nullable
+from
+  information_schema.columns
+where
+  table_schema='23FA_users_zcmcdonough'
+  and table_name='{table_name}'
+order by 
+  ordinal_position
+"""
+    sql_query = pd.read_sql( query, cnx )
+    display(Markdown(f"**Table: {table_name}** \n"))
+
+
+table_names = cnx.connect().execute(text("show tables"))
+for table_name in table_names:
+    if table_name == 'skills':
+        show_table(table_name[0])
+
 ```
 
 
@@ -209,9 +299,18 @@ Let's explore the database!
 (here a sample query)
 
 ```{python}
-sql = f"""
-select * from people
+query = """
+SELECT name, tag, description
+FROM skills
+ORDER BY name;
 """
+
+try:
+    sql_query = pd.read_sql(query, cnx)
+    print(sql_query)
+except Exception as e:
+    print(f"An error occurred: {e}")
+
 ```
 
 
@@ -220,40 +319,267 @@ select * from people
 ```{python}
 #| echo: false
 #| eval: true
-try:
-    df = pd.read_sql(sql,cnx)
-    df
-except Exception as e:
-    message = str(e)
-    print(f"An error occurred:\n\n{message}\n\nIgnoring and moving on.")
-    df = pd.DataFrame()
-df
 
+sql_query.head(15)
+sql_query
+
+def show_table( table_name ):
+    display(Markdown(f"**Table: {table_name}** \n"))
+    display(Markdown(tabulate(
+       sql_query,
+       headers=['Pos','Name','Type','Key','Null?'],
+       showindex= False
+    )))
+
+
+table_names = cnx.connect().execute(text("show tables"))
+for table_name in table_names:
+  show_table(table_name[0])
 ```
 
 
 ### List people names and email addresses ordered by last_name
+```{python}
+query = """
+SELECT first_name, last_name, email
+FROM people
+ORDER BY last_name;
+"""
 
+df = pd.read_sql(query, cnx)
+
+
+```
 
 ### List skill names of Person 1
+DELIMITER //
+
+CREATE PROCEDURE ListSkillsOfPerson1()
+BEGIN
+    SELECT s.name 
+    FROM skills s 
+    JOIN peopleskills ps ON s.id = ps.skills_id 
+    WHERE ps.people_id = 1;
+END //
+
+DELIMITER ;
+```{python}
+query = """
+SHOW TABLES
+SELECT s.name
+FROM skills s
+JOIN peopleskills ps
+ON s.id = ps.skills_id
+WHERE ps.people_id = 1
+"""
+
+df = pd.read_sql(query, cnx)
+
+
+
+```
 
 
 ### List people names with Skill 6
+DELIMITER //
 
+CREATE PROCEDURE ListPeopleWithSkill6()
+BEGIN
+    SELECT p.first_name, p.last_name 
+    FROM people p 
+    JOIN peopleskills ps ON p.id = ps.people_id 
+    WHERE ps.skills_id = 6;
+END //
+
+DELIMITER ;
+```{python}
+query = """
+    SELECT p.first_name, p.last_name 
+    FROM people p 
+    JOIN peopleskills ps
+    ON p.id = ps.people_id 
+    WHERE ps.skills_id = 6
+"""
+
+try:
+    df = pd.read_sql(query, cnx)
+    print(df)
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+
+
+
+```
 
 ### List people with a DEVELOPER role
+DELIMITER //
 
+CREATE PROCEDURE ListPeopleWithDeveloperRole()
+BEGIN
+    SELECT p.first_name, p.last_name 
+    FROM people p 
+    JOIN people_roles pr ON p.id = pr.people_id 
+    JOIN roles r ON pr.role_id = r.id 
+    WHERE r.name = 'DEVELOPER';
+END //
+
+DELIMITER ;
+```{python}
+query = """
+SELECT p.first_name, p.last_name
+FROM people p
+JOIN peopleroles pr ON p.id = pr.people_id
+JOIN roles r ON pr.role_id = r.id
+WHERE r.name = 'DEVELOPER';
+"""
+
+
+# Calling a stored procedure and displaying its result
+df = pd.read_sql(query, cnx)
+df
+
+
+```
 
 ### List names and email addresses of people without skills
+DELIMITER //
 
+CREATE PROCEDURE ListPeopleWithoutSkills()
+BEGIN
+    SELECT p.first_name, p.last_name, p.email 
+    FROM people p 
+    WHERE NOT EXISTS (
+        SELECT 1 
+        FROM peopleskills ps 
+        WHERE p.id = ps.people_id
+    );
+END //
+
+DELIMITER ;
+```{python}
+query = """
+SELECT p.first_name, p.last_name, p.email
+FROM people p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM peopleskills ps
+    WHERE p.id = ps.people_id
+);
+"""
+
+
+# Calling a stored procedure and displaying its result
+df = pd.read_sql(query, cnx)
+df
+
+
+```
 
 ### List names and tags of unused skills
+DELIMITER //
 
+CREATE PROCEDURE ListUnusedSkills()
+BEGIN
+    SELECT s.name, s.tag 
+    FROM skills s 
+    WHERE NOT EXISTS (
+        SELECT 1 
+        FROM peopleskills ps 
+        WHERE s.id = ps.skills_id
+    );
+END //
+
+DELIMITER ;
+```{python}
+query = """
+SELECT s.name, s.tag
+FROM skills s
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM peopleskills ps
+    WHERE s.id = ps.skills_id
+);
+"""
+
+
+# Calling a stored procedure and displaying its result
+df = pd.read_sql(query, cnx)
+df
+
+
+```
 
 ### List people names and skill names with the BOSS role
+DELIMITER //
 
+CREATE PROCEDURE ListPeopleAndSkillsWithBossRole()
+BEGIN
+    SELECT p.first_name, p.last_name, s.name AS skill_name 
+    FROM people p 
+    JOIN people_roles pr ON p.id = pr.people_id 
+    JOIN roles r ON pr.role_id = r.id 
+    JOIN peopleskills ps ON p.id = ps.people_id 
+    JOIN skills s ON ps.skills_id = s.id 
+    WHERE r.name = 'BOSS';
+END //
+
+DELIMITER ;
+```{python}
+query = """
+SELECT p.first_name, p.last_name, s.name AS skill_name
+FROM people p
+JOIN peopleroles pr ON p.id = pr.people_id
+JOIN roles r ON pr.role_id = r.id
+JOIN peopleskills ps ON p.id = ps.people_id
+JOIN skills s ON ps.skills_id = s.id
+WHERE r.name = 'BOSS';
+"""
+
+
+# Calling a stored procedure and displaying its result
+df = pd.read_sql(query, cnx)
+df
+
+
+```
 
 ### List ids and names of unused roles
+DELIMITER //
+
+CREATE PROCEDURE ListUnusedRoles()
+BEGIN
+    SELECT r.id, r.name 
+    FROM roles r 
+    WHERE NOT EXISTS (
+        SELECT 1 
+        FROM people_roles pr 
+        WHERE r.id = pr.role_id
+    );
+END //
+
+DELIMITER ;
+```{python}
+query = ("""
+    select
+        last_name, first_name, email 
+    from
+        people 
+    order by
+        last_name
+    """)
+
+# Calling a stored procedure and displaying its result
+df = pd.read_sql(query, cnx)
+df
+
+
+```
+
+# Calling a stored procedure and displaying its result
+df = pd.read_sql("CALL ListPeopleOrderedByLastName()", cnx)
+df
+
 
 
 ## Reflection

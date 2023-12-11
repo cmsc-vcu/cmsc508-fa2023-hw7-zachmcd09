@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="(your name goes here!)">
-<meta name="dcterms.date" content="2023-11-20">
+<meta name="dcterms.date" content="2023-11-27">
 
 <title>Homework 7 - Creating a resume database</title>
 <style>
@@ -3326,6 +3326,7 @@ z-index: 1000;
   <li><a href="#people-table" id="toc-people-table" class="nav-link" data-scroll-target="#people-table">People table</a></li>
   <li><a href="#skills-table" id="toc-skills-table" class="nav-link" data-scroll-target="#skills-table">Skills table</a></li>
   <li><a href="#roles-table" id="toc-roles-table" class="nav-link" data-scroll-target="#roles-table">Roles table</a></li>
+  <li><a href="#skills-table-1" id="toc-skills-table-1" class="nav-link" data-scroll-target="#skills-table-1">Skills table</a></li>
   </ul></li>
   <li><a href="#sample-queries" id="toc-sample-queries" class="nav-link" data-scroll-target="#sample-queries">Sample queries</a></li>
   <li><a href="#list-skill-names-tags-and-descriptions-ordered-by-name" id="toc-list-skill-names-tags-and-descriptions-ordered-by-name" class="nav-link" data-scroll-target="#list-skill-names-tags-and-descriptions-ordered-by-name">List skill names, tags, and descriptions ordered by name</a>
@@ -3338,6 +3339,9 @@ z-index: 1000;
   <li><a href="#list-names-and-tags-of-unused-skills" id="toc-list-names-and-tags-of-unused-skills" class="nav-link" data-scroll-target="#list-names-and-tags-of-unused-skills">List names and tags of unused skills</a></li>
   <li><a href="#list-people-names-and-skill-names-with-the-boss-role" id="toc-list-people-names-and-skill-names-with-the-boss-role" class="nav-link" data-scroll-target="#list-people-names-and-skill-names-with-the-boss-role">List people names and skill names with the BOSS role</a></li>
   <li><a href="#list-ids-and-names-of-unused-roles" id="toc-list-ids-and-names-of-unused-roles" class="nav-link" data-scroll-target="#list-ids-and-names-of-unused-roles">List ids and names of unused roles</a></li>
+  </ul></li>
+  <li><a href="#calling-a-stored-procedure-and-displaying-its-result" id="toc-calling-a-stored-procedure-and-displaying-its-result" class="nav-link" data-scroll-target="#calling-a-stored-procedure-and-displaying-its-result">Calling a stored procedure and displaying its result</a>
+  <ul class="collapse">
   <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection">Reflection</a></li>
   </ul></li>
   </ul>
@@ -3364,7 +3368,7 @@ z-index: 1000;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 20, 2023</p>
+      <p class="date">November 27, 2023</p>
     </div>
   </div>
   
@@ -3379,7 +3383,6 @@ z-index: 1000;
 <ul>
 <li>This project involves the creation of a database to capture the collective skills, certifications, and roles of employees in our company. The database is structured into five primary tables: <code>skills</code>, <code>people</code>, <code>peopleskills</code>, <code>roles</code>, and <code>people_roles</code>. Each table serves a specific function, from storing employee information to detailing their skills and roles within the company. This database will assist in identifying skill gaps, employee qualifications, and role assignments.</li>
 </ul>
-<p>(include a brief description of what is in this document)</p>
 <p>GITHUB URL: &lt;your URL goes here!&gt;</p>
 </section>
 <section id="overview-and-description" class="level2">
@@ -3450,7 +3453,7 @@ z-index: 1000;
 <p>The <em>people</em> table contains elements that describe … The <code>people</code> table contains detailed information about each employee, including their name, contact details, professional links, and the date they joined the company. It serves as a central repository for employee data.</p>
 <p>Below is a list of data in the <em>people</em> table.</p>
 <div class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="68">
+<div class="cell-output cell-output-display" data-execution_count="37">
 <div>
 
 
@@ -3479,30 +3482,78 @@ z-index: 1000;
 </section>
 <section id="skills-table" class="level3">
 <h3 class="anchored" data-anchor-id="skills-table">Skills table</h3>
-<p>The <em>skills</em> table contains elements that describe … The <code>skills</code> table catalogues various skills and certifications available or acquired within our company. Each skill is described along with its learning commitment and a URL for more information.</p>
-<p>Below is a list of data in the <em>skills</em> table.</p>
+<ul>
+<li>The <code>skills</code> table catalogues various skills and certifications available or acquired within our company. Each skill is described along with its learning commitment and a URL for more information.</li>
+</ul>
+<div class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<p><strong>Table: skills</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Pos</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">IsNull</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;">PRI</td>
+<td style="text-align: left;">NO</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">varchar(255)</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">YES</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">description</td>
+<td style="text-align: left;">varchar(4096)</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">YES</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">tag</td>
+<td style="text-align: left;">varchar(255)</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">YES</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">url</td>
+<td style="text-align: left;">varchar(255)</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">YES</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">time_commitment</td>
+<td style="text-align: left;">varchar(255)</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">YES</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
 <section id="roles-table" class="level3">
 <h3 class="anchored" data-anchor-id="roles-table">Roles table</h3>
 <p>The <em>roles</em> table contains elements that describe …</p>
 <p>Below is a list of data in the <em>roles</em> table.</p>
-</section>
-</section>
-<section id="sample-queries" class="level2">
-<h2 class="anchored" data-anchor-id="sample-queries">Sample queries</h2>
-<p>Let’s explore the database!</p>
-</section>
-<section id="list-skill-names-tags-and-descriptions-ordered-by-name" class="level1">
-<h1>List skill names, tags, and descriptions ordered by name</h1>
-<p>(here a sample query)</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="ss">f&quot;&quot;&quot;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select * from people</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ss">&quot;&quot;&quot;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>(and here is a sample result from the query)</p>
-<div class="cell" data-execution_count="9">
-<div class="cell-output cell-output-display" data-execution_count="72">
+<div class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="39">
 <div>
 
 
@@ -3511,14 +3562,8 @@ z-index: 1000;
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">id</th>
-<th data-quarto-table-cell-role="th">first_name</th>
-<th data-quarto-table-cell-role="th">last_name</th>
-<th data-quarto-table-cell-role="th">email</th>
-<th data-quarto-table-cell-role="th">linkedin_url</th>
-<th data-quarto-table-cell-role="th">headshot_url</th>
-<th data-quarto-table-cell-role="th">discord_handle</th>
-<th data-quarto-table-cell-role="th">brief_bio</th>
-<th data-quarto-table-cell-role="th">date_joined</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">sort_priority</th>
 </tr>
 </thead>
 <tbody>
@@ -3528,30 +3573,145 @@ z-index: 1000;
 </div>
 </div>
 </div>
+</section>
+<section id="skills-table-1" class="level3">
+<h3 class="anchored" data-anchor-id="skills-table-1">Skills table</h3>
+<ul>
+<li>The <code>skills</code> table catalogues various skills and certifications available or acquired within our company. Each skill is described along with its learning commitment and a URL for more information.</li>
+</ul>
+</section>
+</section>
+<section id="sample-queries" class="level2">
+<h2 class="anchored" data-anchor-id="sample-queries">Sample queries</h2>
+<p>Let’s explore the database!</p>
+</section>
+<section id="list-skill-names-tags-and-descriptions-ordered-by-name" class="level1">
+<h1>List skill names, tags, and descriptions ordered by name</h1>
+<p>(here a sample query)</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT name, tag, description</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">FROM skills</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY name;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_sql(query, cnx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(and here is a sample result from the query)</p>
+<div class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display">
+<p><strong>Table: people</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<p>Pos Name Type Key Null? —– —— —— —– ——-</p>
+</div>
+<div class="cell-output cell-output-display">
+<p><strong>Table: people_roles</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<p>Pos Name Type Key Null? —– —— —— —– ——-</p>
+</div>
+<div class="cell-output cell-output-display">
+<p><strong>Table: peopleskills</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<p>Pos Name Type Key Null? —– —— —— —– ——-</p>
+</div>
+<div class="cell-output cell-output-display">
+<p><strong>Table: roles</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<p>Pos Name Type Key Null? —– —— —— —– ——-</p>
+</div>
+<div class="cell-output cell-output-display">
+<p><strong>Table: skills</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<p>Pos Name Type Key Null? —– —— —— —– ——-</p>
+</div>
+</div>
 <section id="list-people-names-and-email-addresses-ordered-by-last_name" class="level3">
 <h3 class="anchored" data-anchor-id="list-people-names-and-email-addresses-ordered-by-last_name">List people names and email addresses ordered by last_name</h3>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> (<span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">        first_name, last_name, email </span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">    from</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">        people </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">    order by</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">        last_name</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Calling a stored procedure and displaying its result</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_sql(query, cnx)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">first_name</th>
+<th data-quarto-table-cell-role="th">last_name</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 </section>
 <section id="list-skill-names-of-person-1" class="level3">
 <h3 class="anchored" data-anchor-id="list-skill-names-of-person-1">List skill names of Person 1</h3>
+<p>DELIMITER //</p>
+<p>CREATE PROCEDURE ListSkillsOfPerson1() BEGIN SELECT s.name FROM skills s JOIN peopleskills ps ON s.id = ps.skills_id WHERE ps.people_id = 1; END //</p>
+<p>DELIMITER ;</p>
 </section>
 <section id="list-people-names-with-skill-6" class="level3">
 <h3 class="anchored" data-anchor-id="list-people-names-with-skill-6">List people names with Skill 6</h3>
+<p>DELIMITER //</p>
+<p>CREATE PROCEDURE ListPeopleWithSkill6() BEGIN SELECT p.first_name, p.last_name FROM people p JOIN peopleskills ps ON p.id = ps.people_id WHERE ps.skills_id = 6; END //</p>
+<p>DELIMITER ;</p>
 </section>
 <section id="list-people-with-a-developer-role" class="level3">
 <h3 class="anchored" data-anchor-id="list-people-with-a-developer-role">List people with a DEVELOPER role</h3>
+<p>DELIMITER //</p>
+<p>CREATE PROCEDURE ListPeopleWithDeveloperRole() BEGIN SELECT p.first_name, p.last_name FROM people p JOIN people_roles pr ON p.id = pr.people_id JOIN roles r ON pr.role_id = r.id WHERE r.name = ‘DEVELOPER’; END //</p>
+<p>DELIMITER ;</p>
 </section>
 <section id="list-names-and-email-addresses-of-people-without-skills" class="level3">
 <h3 class="anchored" data-anchor-id="list-names-and-email-addresses-of-people-without-skills">List names and email addresses of people without skills</h3>
+<p>DELIMITER //</p>
+<p>CREATE PROCEDURE ListPeopleWithoutSkills() BEGIN SELECT p.first_name, p.last_name, p.email FROM people p WHERE NOT EXISTS ( SELECT 1 FROM peopleskills ps WHERE p.id = ps.people_id ); END //</p>
+<p>DELIMITER ;</p>
 </section>
 <section id="list-names-and-tags-of-unused-skills" class="level3">
 <h3 class="anchored" data-anchor-id="list-names-and-tags-of-unused-skills">List names and tags of unused skills</h3>
+<p>DELIMITER //</p>
+<p>CREATE PROCEDURE ListUnusedSkills() BEGIN SELECT s.name, s.tag FROM skills s WHERE NOT EXISTS ( SELECT 1 FROM peopleskills ps WHERE s.id = ps.skills_id ); END //</p>
+<p>DELIMITER ;</p>
 </section>
 <section id="list-people-names-and-skill-names-with-the-boss-role" class="level3">
 <h3 class="anchored" data-anchor-id="list-people-names-and-skill-names-with-the-boss-role">List people names and skill names with the BOSS role</h3>
+<p>DELIMITER //</p>
+<p>CREATE PROCEDURE ListPeopleAndSkillsWithBossRole() BEGIN SELECT p.first_name, p.last_name, s.name AS skill_name FROM people p JOIN people_roles pr ON p.id = pr.people_id JOIN roles r ON pr.role_id = r.id JOIN peopleskills ps ON p.id = ps.people_id JOIN skills s ON ps.skills_id = s.id WHERE r.name = ‘BOSS’; END //</p>
+<p>DELIMITER ;</p>
 </section>
 <section id="list-ids-and-names-of-unused-roles" class="level3">
 <h3 class="anchored" data-anchor-id="list-ids-and-names-of-unused-roles">List ids and names of unused roles</h3>
+<p>DELIMITER //</p>
+<p>CREATE PROCEDURE ListUnusedRoles() BEGIN SELECT r.id, r.name FROM roles r WHERE NOT EXISTS ( SELECT 1 FROM people_roles pr WHERE r.id = pr.role_id ); END //</p>
+<p>DELIMITER ;</p>
 </section>
+</section>
+<section id="calling-a-stored-procedure-and-displaying-its-result" class="level1">
+<h1>Calling a stored procedure and displaying its result</h1>
+<p>df = pd.read_sql(“CALL ListPeopleOrderedByLastName()”, cnx) df</p>
 <section id="reflection" class="level2">
 <h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
 <p>(Write a paragraph expressing your thoughts, feelings, and insights about your experience with this assignment. Pause and breath before writing - I’m trying to encourage critical thinking and self-awareness while allowing you to explore the connections between theory and practice. And yes, delete this paragraph.)</p>
