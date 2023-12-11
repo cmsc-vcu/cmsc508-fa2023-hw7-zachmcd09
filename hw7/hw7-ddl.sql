@@ -16,11 +16,11 @@
 # Section 1
 # Drops all tables.  This section should be amended as new tables are added.
 
-DROP TABLE IF EXISTS people_roles;
-DROP TABLE IF EXISTS peopleskills;
-DROP TABLE IF EXISTS people;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS skills;
+DROP TABLE IF EXISTS 23FA_users_zcmcdonough.peopleroles;
+DROP TABLE IF EXISTS 23FA_users_zcmcdonough.peopleskills;
+DROP TABLE IF EXISTS 23FA_users_zcmcdonough.people;
+DROP TABLE IF EXISTS 23FA_users_zcmcdonough.roles;
+DROP TABLE IF EXISTS 23FA_users_zcmcdonough.skills;
 
 
 # Section 2
@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS skills;
 # time committment offers some sense of how much time was required (or will be required) to gain the skill.
 # You can assign the skill descriptions.  Please be creative!
 
-CREATE TABLE skills (
+CREATE TABLE 23FA_users_zcmcdonough.skills (
     id INT PRIMARY KEY,
     name VARCHAR(255),
     description VARCHAR(4096),
@@ -45,7 +45,7 @@ CREATE TABLE skills (
 # Populates the skills table with eight skills, their tag fields must exactly contain “Skill 1”, “Skill 2”, etc.
 # You can assign skill names.  Please be creative!
 -- Populate the skills table with eight skills
-INSERT INTO skills (id, name, description, tag, url, time_commitment) VALUES
+INSERT INTO 23FA_users_zcmcdonough.skills (id, name, description, tag, url, time_commitment) VALUES
 (1, 'Web Development', 'Skill in creating and maintaining websites', 'Skill 1', 'http://webdev.com', '30 hours'),
 (2, 'Graphic Design', 'Skill in visual content creation', 'Skill 2', 'http://graphicdesign.com', '25 hours'),
 (3, 'Project Management', 'Skill in managing projects effectively', 'Skill 3', 'http://projectmanagement.com', '40 hours'),
@@ -62,7 +62,7 @@ INSERT INTO skills (id, name, description, tag, url, time_commitment) VALUES
 # ID cannot be null, Last name cannot be null, date joined cannot be NULL.
 # All other fields can default to NULL.
 
-CREATE TABLE people (
+CREATE TABLE 23FA_users_zcmcdonough.people (
     id INT PRIMARY KEY,
     first_name VARCHAR(255),
     last_name VARCHAR(255) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE people (
 # Other fields are for you to assign.
 
 
-INSERT INTO people (id, first_name, last_name, email, linkedin_url, headshot_url, discord_handle, brief_bio, date_joined) VALUES
+INSERT INTO 23FA_users_zcmcdonough.people (id, first_name, last_name, email, linkedin_url, headshot_url, discord_handle, brief_bio, date_joined) VALUES
 (1, 'Alice', 'Person 1', 'alice@email.com', 'http://linkedin.com/in/alice', 'http://headshot1.com', 'alicehandle', 'Bio of Alice', '2023-01-01'),
 (2, 'Bob', 'Person 2', 'bob@email.com', 'http://linkedin.com/in/bob', 'http://headshot2.com', 'bobhandle', 'Bio of Bob', '2023-01-02'),
 (3, 'Charlie', 'Person 3', 'charlie@email.com', 'http://linkedin.com/in/charlie', 'http://headshot3.com', 'charliehandle', 'Bio of Charlie', '2023-01-03'),
@@ -98,7 +98,7 @@ INSERT INTO people (id, first_name, last_name, email, linkedin_url, headshot_url
 # Create peopleskills( id, skills_id, people_id, date_acquired )
 # None of the fields can ba NULL. ID can be auto_increment.
 
-CREATE TABLE peopleskills (
+CREATE TABLE 23FA_users_zcmcdonough.peopleskills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     skills_id INT NOT NULL,
     people_id INT NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE peopleskills (
 # Note that no one has yet acquired skills 7 and 8.
 
 
-INSERT INTO peopleskills (skills_id, people_id, date_acquired) VALUES
+INSERT INTO 23FA_users_zcmcdonough.peopleskills (skills_id, people_id, date_acquired) VALUES
 (1, 1, '2023-02-01'), -- Person 1 has skill 1
 (3, 1, '2023-02-15'), -- Person 1 has skill 3
 (6, 1, '2023-03-01'), -- Person 1 has skill 6
@@ -157,7 +157,7 @@ INSERT INTO peopleskills (skills_id, people_id, date_acquired) VALUES
 # Create roles( id, name, sort_priority )
 # sort_priority is an integer and is used to provide an order for sorting roles
 
-CREATE TABLE roles (
+CREATE TABLE 23FA_users_zcmcdonough.roles (
     id INT PRIMARY KEY,
     name VARCHAR(255),
     sort_priority INT
@@ -169,14 +169,13 @@ CREATE TABLE roles (
 # Designer, Developer, Recruit, Team Lead, Boss, Mentor
 # Sort priority is assigned numerically in the order listed above (Designer=10, Developer=20, Recruit=30, etc.)
 
-INSERT INTO roles (id, name, sort_priority) VALUES
+INSERT INTO 23FA_users_zcmcdonough.roles (id, name, sort_priority) VALUES
 (1, 'Designer', 10),
 (2, 'Developer', 20),
 (3, 'Recruit', 30),
 (4, 'Team Lead', 40),
 (5, 'Boss', 50),
-(6, 'Mentor', 60)
-;
+(6, 'Mentor', 60);
 
 
 
@@ -185,7 +184,7 @@ INSERT INTO roles (id, name, sort_priority) VALUES
 # None of the fields can be null.  ID can be auto_increment
 
 
-CREATE TABLE peopleroles (
+CREATE TABLE 23FA_users_zcmcdonough.peopleroles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     people_id INT NOT NULL,
     role_id INT NOT NULL,
@@ -211,7 +210,7 @@ CREATE TABLE peopleroles (
 # Person 10 is Developer and Designer
 
 -- Populate the peopleroles table
-INSERT INTO peopleroles (people_id, role_id, date_role_acquired) VALUES
+INSERT INTO 23FA_users_zcmcdonough.peopleroles (people_id, role_id, date_role_acquired) VALUES
 (1, 2, '2023-01-01'), -- Person 1 is a Developer
 (2, 5, '2023-01-05'), -- Person 2 is a Boss
 (2, 6, '2023-01-10'), -- Person 2 is also a Mentor
